@@ -1,22 +1,11 @@
 require_relative "util/game_state_manager"
-require_relative "lib/constants"
-require_relative "entities/enemy"
+require_relative "util/ape_quest_bot"
 
 require "pry"
 
-include Constants
-
-def set_players(gsm)
-  players = []
-  rows = gsm.db.query("SELECT * FROM players")
-  rows.each do |row|
-    players << Entities::Player.new(row)
-  end
-  return players
-end
-
 gsm = Util::GameStateManager.new
+bot = Util::ApeQuestBot.new(gsm)
 
-enemy = Entities::Enemy.new(3, gsm.db)
+running = true
 
-binding.pry
+bot.run

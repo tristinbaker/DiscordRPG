@@ -6,7 +6,6 @@ module Entities
 
     def initialize(enemy_id, db)
       @enemy_id = enemy_id
-      #require "pry" && binding.pry
       set_enemy_details(db)
     end
 

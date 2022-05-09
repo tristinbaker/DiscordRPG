@@ -8,17 +8,8 @@ module Util
 
     def initialize()
       @db = Util::Database.new(Constants::DB_FILE_NAME)
-      @players = init_players
       @quests = init_quests
-    end
-
-    def init_players
-      players = []
-      rows = @db.query("SELECT * FROM players")
-      rows.each do |row|
-        players << Entities::Player.new(row, @db)
-      end
-      return players
+      @players = init_players
     end
 
     def init_quests
@@ -28,6 +19,20 @@ module Util
         quests << Events::Quest.new(row, @db)
       end
       return quests
+    end
+
+    def init_players
+      players = []
+      rows = @db.query("SELECT * FROM players")
+      rows.each do |row|
+        player = Entities::Player.new(row, @db)
+        player.player_quest_log.set_quest_details(@db, @quests)
+        players << player
+      end
+      return players
+    end
+
+    def handle_quest_stage(player, quest, action, amount = 0)
     end
   end
 end

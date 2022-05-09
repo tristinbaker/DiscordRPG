@@ -1,14 +1,17 @@
 require_relative "./inventory.rb"
+require_relative "./player_quest_log.rb"
 
 module Entities
   class Player
-    attr_accessor :player_id, :player_name, :inventory, :player_details
+    attr_accessor :player_id, :player_name, :inventory, :player_details, :player_quest_log, :action
 
     def initialize(player, db)
       @player_id = player["player_id"]
       @player_name = player["player_name"]
       @inventory = set_inventory(db)
       @player_details = set_player_details(db)
+      @player_quest_log = set_player_quest_log(db)
+      @action = actions["idle"]
     end
 
     def set_inventory(db)
@@ -29,6 +32,25 @@ module Entities
         details = db.query("SELECT * FROM player_details WHERE player_id = #{@player_id}").first
       end
       return details
+    end
+
+    def set_player_quest_log(db)
+      player_quest_log = Entities::PlayerQuestLog.new(player_id, db)
+      return player_quest_log
+    end
+
+    def print_player
+      opts = {}
+      opts[:title] = "#{@player_name} Stats"
+      opts[:description] = "Level #{@player_details["level"]} (#{player_details["experience"]} EXP)\n"
+      opts[:description] += "**HP:** #{@player_details["hp"].to_i}/#{@player_details["max_hp"].to_i}\n**MP:** #{@player_details["mp"].to_i}/#{@player_details["max_mp"].to_i}\n"
+      opts[:description] += "**STR:** #{@player_details["strength"]}\n**AGL:** #{@player_details["agility"]}\n**INT:** #{@player_details["intelligence"]}\n"
+      opts[:opts] = Hash.new("")
+      return opts
+    end
+
+    def actions
+      { idle: "IDLE", questing: "QUESTING", battle: "BATTLE" }
     end
   end
 end

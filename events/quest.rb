@@ -3,7 +3,7 @@ require_relative "../entities/item"
 
 module Events
   class Quest
-    attr_accessor :quest_name, :quest_description, :quest_enemy, :quest_enemy_amount, :quest_reward,
+    attr_accessor :quest_id, :quest_name, :quest_description, :quest_enemy, :quest_enemy_amount, :quest_reward,
                   :quest_reward_amount, :quest_secondary_reward, :quest_secondary_reward_amount,
                   :quest_money_amount
 
