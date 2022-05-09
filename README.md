@@ -8,7 +8,7 @@ I chose to make this a Discord bot based game simply because I love writing Disc
 
 ## Plans
 
-* ~~Add quest log
+* ~~Add quest log~~
 * Add battle system
 	* Fine tune damage calculation
 * Add rewards system
