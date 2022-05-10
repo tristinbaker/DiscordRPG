@@ -15,7 +15,7 @@ I chose to make this a Discord bot based game simply because I love writing Disc
 * Improve player inventory system
 * Add player level up system
 * Create item variants
-* Create very basic art for Discord bot to output
+* ~~Create very basic art for Discord bot to output~~
 * More stuff planned, but these are the pressing goals
 (As a lofty goal, I plan on adding fishing and farming minigames)
 
