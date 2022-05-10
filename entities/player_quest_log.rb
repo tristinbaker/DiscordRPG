@@ -14,13 +14,17 @@ module Entities
     end
 
     def set_quest_details(db, quests)
-      @quests = []
+      @quests = Hash.new({})
       player_quests = db.query("SELECT * FROM player_quest_log_details WHERE player_quest_log_id = #{@player_quest_log["id"]}")
       return false if player_quests.empty?
       player_quests.each do |player_quest|
         quest = quests.select { |q| q.quest_id == player_quest["quest_id"] }&.first
         next if quest.nil?
-        @quests << quest
+        @quests[quest.quest_id] = { quest_name: quest.quest_name, quest_description: quest.quest_description,
+                                    quest_enemy: quest.quest_enemy.name, quest_enemy_required: quest.quest_enemy_amount,
+                                    quest_enemies_killed: player_quest["quest_enemies_killed"],
+                                    quest_items_gained: player_quest["quest_items_gained"],
+                                    completed: player_quest["completed"], reward_paid_out: player_quest["reward_paid_out"] }
       end
       return @quests
     end
