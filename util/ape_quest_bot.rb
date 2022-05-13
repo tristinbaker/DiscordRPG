@@ -24,18 +24,18 @@ module Util
         command = decipher_command(arguments)
         case command
         when "show_player"
-          opts = player.print_player
+          opts = MessageHelper.print_player_opts(player)
         when "quest_status"
           opts = gsm.quest_manager.print_quest_status(arguments, player)
         when "quest_log"
           opts = gsm.quest_manager.print_quest_log(player)
         when "show_enemy"
           enemy = gsm.enemies.select { |e| e.name.downcase == arguments[2..arguments.length].join(" ").downcase }&.first
-          opts = enemy.print_enemy(enemy) unless enemy.nil?
+          opts = enemy.print_enemy unless enemy.nil?
         when "show_enemy_list"
           opts = gsm.print_enemy_list
         when "update_name"
-          opts = player.update_name(arguments, gsm.db, player)
+          opts = player.set_name(arguments, gsm.db, player)
         when "quest_help"
           opts = MessageHelper.quest_help_opts
         when "show_help"
@@ -44,9 +44,12 @@ module Util
           opts = MessageHelper.update_help_opts
         when "general_help"
           opts = MessageHelper.general_help_opts
+        when "battle_show"
+          opts = gsm.battle_manager.print_player_battle(player)
+        when "battle_start"
+          opts = gsm.battle_manager.add_battle(player, gsm, arguments)
         else
           opts = MessageHelper.unknown_command_opts
-          opts = "Unknown command!"
         end
         message = format_output(opts)
         event.channel.send_embed("", message)
@@ -95,6 +98,13 @@ module Util
           command = "update_help"
         else
           command = "general_help"
+        end
+      when "battle"
+        case arguments[1]
+        when "start"
+          command = "battle_start"
+        when "show"
+          command = "battle_show"
         end
       end
       return command

@@ -6,5 +6,6 @@ bot = Util::ApeQuestBot.new(gsm)
 
 require "pry"
 #binding.pry
+gsm.players.first.get_player_damage(gsm.enemies.first)
 
 bot.run

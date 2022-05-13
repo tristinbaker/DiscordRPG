@@ -1,11 +1,12 @@
 require_relative "./database"
 require_relative "./quest_manager"
+require_relative "./battle_manager"
 require_relative "../entities/player"
 require_relative "../events/quest"
 
 module Util
   class GameStateManager
-    attr_accessor :db, :players, :quests, :enemies, :quest_manager
+    attr_accessor :db, :players, :quests, :enemies, :quest_manager, :battle_manager
 
     def initialize()
       @db = Util::Database.new(Constants::DB_FILE_NAME)
@@ -13,6 +14,7 @@ module Util
       @players = init_players
       @enemies = init_enemies
       @quest_manager = init_quest_manager
+      @battle_manager = init_battle_manager
     end
 
     def init_quests
@@ -48,10 +50,14 @@ module Util
       @quest_master = Util::QuestManager.new(@quests)
     end
 
+    def init_battle_manager
+      @battle_manager = Util::BattleManager.new
+    end
+
     def print_enemy_list
       opts = {}
       opts[:title] = "ApeQuest Enemy List"
-      opts[:description] = ""
+      opts[:description] = "*Note: This does not include bosses!*\n\n"
       @enemies.each_with_index do |enemy, i|
         next if enemy.is_boss
         opts[:description] += "**#{i + 1})** #{enemy.name} (*Lvl #{enemy.level}*)\n"
